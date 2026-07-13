@@ -515,9 +515,10 @@ async function submitRequest(){
     }
 
     const response = await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: formData
-    });
+    method: "POST",
+    body: formData,
+    redirect: "follow"
+});
 
     const result = await response.text();
 
