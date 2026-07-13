@@ -1,0 +1,610 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+
+    --bg:#070707;
+    --panel:rgba(18,18,18,.82);
+    --red:#ff2d2d;
+    --redDark:#740000;
+    --text:#f3f3f3;
+    --gray:#bdbdbd;
+
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+
+    width:100vw;
+    height:100vh;
+
+    overflow:hidden;
+
+}
+
+/* =====================
+   BACKGROUND
+===================== */
+
+.background{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+
+    radial-gradient(circle at top,#350000,#070707 70%);
+
+    z-index:-3;
+
+}
+
+/* Red Glow */
+
+.background::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:650px;
+    height:650px;
+
+    background:red;
+
+    filter:blur(170px);
+
+    opacity:.12;
+
+    top:-220px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+}
+
+/* Scanlines */
+
+.background::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background-image:
+
+    repeating-linear-gradient(
+
+    transparent,
+
+    transparent 3px,
+
+    rgba(255,255,255,.03) 4px
+
+    );
+
+    animation:scan 12s linear infinite;
+
+}
+
+/* =====================
+   SCREENS
+===================== */
+
+.screen{
+
+    position:absolute;
+
+    inset:0;
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:25px;
+
+}
+
+.screen.active{
+
+    display:flex;
+
+}
+
+/* =====================
+   MAIN CONTAINER
+===================== */
+
+.container{
+
+    width:520px;
+
+    max-width:95%;
+
+    background:var(--panel);
+
+    backdrop-filter:blur(16px);
+
+    border-radius:22px;
+
+    border:1px solid rgba(255,0,0,.18);
+
+    padding:40px;
+
+    box-shadow:
+
+    0 0 40px rgba(255,0,0,.18);
+
+    animation:fade .45s;
+
+}
+
+/* =====================
+   LOGO
+===================== */
+
+.logo{
+
+    text-align:center;
+
+    font-family:'Orbitron';
+
+    font-size:78px;
+
+    font-weight:800;
+
+    color:var(--red);
+
+    letter-spacing:8px;
+
+    text-shadow:
+
+    0 0 12px red,
+
+    0 0 35px red,
+
+    0 0 70px darkred;
+
+    animation:flicker 2.2s infinite;
+
+}
+
+.subtitle{
+
+    margin-top:18px;
+
+    text-align:center;
+
+    color:#d7d7d7;
+
+    font-size:18px;
+
+}
+
+/* =====================
+   TITLES
+===================== */
+
+h2{
+
+    text-align:center;
+
+    font-family:'Orbitron';
+
+    margin-bottom:20px;
+
+    letter-spacing:2px;
+
+}
+
+p{
+
+    line-height:1.6;
+
+}
+
+/* =====================
+   BUTTONS
+===================== */
+
+button{
+
+    width:100%;
+
+    margin-top:18px;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:
+
+    linear-gradient(90deg,var(--redDark),var(--red));
+
+    color:white;
+
+    font-family:'Orbitron';
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    transition:.28s;
+
+}
+
+button:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+
+    0 0 22px rgba(255,0,0,.45);
+
+}
+
+button:active{
+
+    transform:scale(.98);
+
+}
+
+.button-group{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:15px;
+
+}
+
+.button-group button{
+
+    margin-top:0;
+
+}
+
+/* =====================
+   LOADING
+===================== */
+
+.loading-bar{
+
+    width:100%;
+
+    height:18px;
+
+    margin-top:30px;
+
+    background:#222;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+}
+
+#progress{
+
+    width:0%;
+
+    height:100%;
+
+    background:
+
+    linear-gradient(90deg,#6d0000,#ff2d2d);
+
+    transition:width .03s;
+
+}
+
+#loadingText{
+
+    text-align:center;
+
+    margin-top:15px;
+
+    color:#ddd;
+
+}
+
+input,
+select,
+textarea{
+
+    width:100%;
+
+    margin-top:15px;
+
+    padding:15px 18px;
+
+    background:#111;
+
+    border:1px solid rgba(255,255,255,.12);
+
+    border-radius:12px;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-family:'Poppins',sans-serif;
+
+    outline:none;
+
+    transition:.3s;
+
+}
+
+input::placeholder,
+textarea::placeholder{
+
+    color:#8d8d8d;
+
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+
+    border-color:var(--red);
+
+    box-shadow:
+    0 0 15px rgba(255,45,45,.35);
+
+}
+
+textarea{
+
+    resize:none;
+
+    min-height:120px;
+
+}
+
+/* =====================
+   LABELS
+===================== */
+
+label{
+
+    display:block;
+
+    margin-top:18px;
+
+    margin-bottom:8px;
+
+    font-size:14px;
+
+    color:#d7d7d7;
+
+}
+
+/* =====================
+   PROFILE CARD
+===================== */
+
+.profile{
+
+    background:#111;
+
+    border:1px solid rgba(255,45,45,.18);
+
+    border-radius:14px;
+
+    padding:18px;
+
+    margin-bottom:25px;
+
+}
+
+.profile p{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin:10px 0;
+
+}
+
+.profile strong{
+
+    color:var(--red);
+
+}
+
+.profile span{
+
+    color:white;
+
+}
+
+/* =====================
+   FORM AREA
+===================== */
+
+#formFields{
+
+    margin-top:10px;
+
+}
+
+#formTitle{
+
+    margin-bottom:20px;
+
+}
+
+/* =====================
+   SUCCESS SCREEN
+===================== */
+
+#success h2{
+
+    color:var(--red);
+
+}
+
+#success p{
+
+    text-align:center;
+
+    margin-top:12px;
+
+}
+
+#success strong{
+
+    color:#58ff91;
+
+}
+
+/* =====================
+   UNIT BUTTONS
+===================== */
+
+.unit-btn{
+
+    margin-top:20px;
+
+}
+
+/* =====================
+   SCROLLBAR
+===================== */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#5a0000;
+
+    border-radius:50px;
+
+}
+
+/* =====================
+   ANIMATIONS
+===================== */
+
+@keyframes fade{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(18px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+@keyframes flicker{
+
+0%,18%,22%,25%,53%,57%,100%{
+
+opacity:1;
+
+}
+
+20%,24%,55%{
+
+opacity:.45;
+
+}
+
+}
+
+@keyframes scan{
+
+    from{
+
+        transform:translateY(-100%);
+
+    }
+
+    to{
+
+        transform:translateY(100%);
+
+    }
+
+}
+
+/* =====================
+   MOBILE
+===================== */
+
+@media(max-width:600px){
+
+.container{
+
+    width:95%;
+
+    padding:28px;
+
+}
+
+.logo{
+
+    font-size:52px;
+
+    letter-spacing:4px;
+
+}
+
+.subtitle{
+
+    font-size:16px;
+
+}
+
+button{
+
+    padding:14px;
+
+}
+
+.button-group{
+
+    flex-direction:column;
+
+}
+
+.profile p{
+
+    flex-direction:column;
+
+    gap:4px;
+
+}
+
+}
