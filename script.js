@@ -368,7 +368,8 @@ function buildLeaveForm(){
 
 }
 
-const SCRIPT_URL ="https://script.google.com/macros/s/AKfycbyCrZuGOQx40ry5VC-ota-5lt-WDQGgBOxm8A4-vtXVwMK31vjCy488KXjQAf4-Xhdi-w/exec";
+const SUPABASE_URL = "https://bqyictbsqmhaegiqqfyy.supabase.co";
+const SUPABASE_KEY = "sb_publishable_cjJhB1tw4WejDEQvNKFjAA_HoKn2j6C";
 
 // ---------------------------
 // Submit Button
@@ -376,14 +377,12 @@ const SCRIPT_URL ="https://script.google.com/macros/s/AKfycbyCrZuGOQx40ry5VC-ota
 
 submitBtn.addEventListener("click", submitRequest);
 
-async function submitRequest(){
+async function submitRequest() {
 
     let data = {
-
         name: localStorage.getItem("name"),
         port: localStorage.getItem("port"),
         unit: localStorage.getItem("unit"),
-
         request: requestType,
 
         newName: "",
@@ -400,154 +399,144 @@ async function submitRequest(){
         leaveDate: "",
 
         reason: ""
+    }
 
-    };
-
-    // ------------------------
+    // ==========================
     // CHANGE
-    // ------------------------
+    // ==========================
 
-    if(requestType === "Change"){
+    if (requestType === "Change") {
 
         data.newName = document.getElementById("newName").value.trim();
         data.newPort = document.getElementById("newPort").value.trim();
         data.newUnit = document.getElementById("newUnit").value;
         data.reason = document.getElementById("reason").value.trim();
 
-        if(
+        if (
             data.newName === "" ||
             data.newPort === "" ||
             data.newUnit === "" ||
             data.reason === ""
-        ){
-
+        ) {
             alert("Please complete all fields.");
-
             return;
-
         }
-
     }
 
-    // ------------------------
+    // ==========================
     // ADD
-    // ------------------------
+    // ==========================
 
-    if(requestType === "Add"){
+    if (requestType === "Add") {
 
         data.accountName = document.getElementById("accountName").value.trim();
         data.accountLink = document.getElementById("accountLink").value.trim();
         data.addedPort = document.getElementById("addedPort").value.trim();
 
-        if(
+        if (
             data.accountName === "" ||
             data.accountLink === "" ||
             data.addedPort === ""
-        ){
-
+        ) {
             alert("Please complete all fields.");
-
             return;
-
         }
-
     }
 
-    // ------------------------
+    // ==========================
     // HIATUS
-    // ------------------------
+    // ==========================
 
-    if(requestType === "Hiatus"){
+    if (requestType === "Hiatus") {
 
         data.reason = document.getElementById("reason").value.trim();
         data.hiatusStart = document.getElementById("startDate").value;
         data.hiatusEnd = document.getElementById("endDate").value;
 
-        if(
+        if (
             data.reason === "" ||
             data.hiatusStart === "" ||
             data.hiatusEnd === ""
-        ){
-
+        ) {
             alert("Please complete all fields.");
-
             return;
-
         }
-
     }
 
-    // ------------------------
+    // ==========================
     // LEAVE
-    // ------------------------
+    // ==========================
 
-    if(requestType === "Leave"){
+    if (requestType === "Leave") {
 
         data.reason = document.getElementById("reason").value.trim();
         data.leaveDate = document.getElementById("leaveDate").value;
 
-        if(
+        if (
             data.reason === "" ||
             data.leaveDate === ""
-        ){
-
+        ) {
             alert("Please complete all fields.");
+            return;
+        }
+    }
+
+    // ==========================
+    // SUBMIT TO SUPABASE
+    // ==========================
+
+    try {
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "SUBMITTING...";
+
+        const response = await fetch(
+            `${SUPABASE_URL}/rest/v1/requests`,
+            {
+                method: "POST",
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": `Bearer ${SUPABASE_KEY}`,
+                    "Content-Type": "application/json",
+                    "Prefer": "return=representation"
+                },
+                body: JSON.stringify(data)
+            }
+        );
+
+        if (!response.ok) {
+
+            const error = await response.text();
+
+            console.error(error);
+
+            alert(error);
 
             return;
 
         }
 
-    }
-
-    // ------------------------
-    // Send to Google Sheets
-    // ------------------------
-
-    try {
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = "SUBMITTING...";
-
-    const formData = new FormData();
-
-    for (const key in data) {
-        formData.append(key, data[key]);
-    }
-
-    const response = await fetch(SCRIPT_URL, {
-    method: "POST",
-    body: formData,
-    redirect: "follow"
-});
-
-    const result = await response.text();
-
-    console.log("Status:", response.status);
-    console.log("Response:", result);
-
-    if (response.ok) {
-
         formFields.innerHTML = "";
+
         showScreen(success);
 
-    } else {
+    } catch (error) {
 
-        alert("Submission failed:\n" + result);
+        console.error(error);
+
+        alert("Submission failed.\n\n" + error.message);
+
+    } finally {
+
+        submitBtn.disabled = false;
+
+        submitBtn.textContent = "SUBMIT";
 
     }
 
-} catch (error) {
+};
 
-    console.error(error);
-    alert(error.message);
 
-} finally {
-
-    submitBtn.disabled = false;
-    submitBtn.textContent = "SUBMIT";
-
-}
-}
 // -------------------------
 // Reset Request Type
 // -------------------------
